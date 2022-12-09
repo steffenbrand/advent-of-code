@@ -31,7 +31,7 @@ class Part2Test extends TestCase
             ],
             [
                 __DIR__ . '/../../../resources/Year2022/Day9/puzzle.txt',
-                1
+                2531
             ]
         ];
     }
