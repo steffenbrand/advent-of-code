@@ -39,9 +39,7 @@ class Part2
     {
         for ($i = 1; $i <= $steps; $i++) {
             $this->knots[0]->move($direction);
-            if ($this->knots[0]->getChild()) {
-                $this->knots[0]->getChild()->follow($this->knots[0]);
-            }
+            $this->knots[0]->getChild()?->follow($this->knots[0]);
         }
     }
 }
