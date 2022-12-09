@@ -18,7 +18,7 @@ class Part1
 
     public function solve(string $puzzle): int
     {
-        $this->positionsVisitedByTail['v0h0'] = 1;
+        $this->positionsVisitedByTail['h0v0'] = 1;
 
         foreach (explode(PHP_EOL, $puzzle) as $line) {
             $movement = explode(' ', $line);
@@ -65,7 +65,7 @@ class Position
 
     public function getUniqueIdentifier(): string
     {
-        return sprintf('v%dh%d', $this->horizontal, $this->vertical);
+        return sprintf('h%dv%d', $this->horizontal, $this->vertical);
     }
 
     public function getHorizontal(): int
