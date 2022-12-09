@@ -123,27 +123,19 @@ class Position
         }
 
         if (!$this->parentAndChildAreInLine($parent)) {
-            if (!$requiredMovements[self::DIRECTION_RIGHT] &&
-                $parent->getHorizontal() > $this->getHorizontal())
-            {
+            if (!$requiredMovements[self::DIRECTION_RIGHT] && $parent->getHorizontal() > $this->getHorizontal()) {
                 $requiredMovements[self::DIRECTION_RIGHT] = true;
             }
 
-            if (!$requiredMovements[self::DIRECTION_LEFT] &&
-                $this->getHorizontal() > $parent->getHorizontal())
-            {
+            if (!$requiredMovements[self::DIRECTION_LEFT] && $this->getHorizontal() > $parent->getHorizontal()) {
                 $requiredMovements[self::DIRECTION_LEFT] = true;
             }
 
-            if (!$requiredMovements[self::DIRECTION_UP] &&
-                $parent->getVertical() > $this->getVertical())
-            {
+            if (!$requiredMovements[self::DIRECTION_UP] && $parent->getVertical() > $this->getVertical()) {
                 $requiredMovements[self::DIRECTION_UP] = true;
             }
 
-            if (!$requiredMovements[self::DIRECTION_DOWN] &&
-                $this->getVertical() > $parent->getVertical())
-            {
+            if (!$requiredMovements[self::DIRECTION_DOWN] && $this->getVertical() > $parent->getVertical()) {
                 $requiredMovements[self::DIRECTION_DOWN] = true;
             }
         }
