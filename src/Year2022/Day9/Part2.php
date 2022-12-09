@@ -87,10 +87,23 @@ class Position
 
     public function follow(Position $parent): void
     {
-        if ($this->parentAndChildAreInTheSamePlace($parent)) {
-            return;
+        $requiredMovements = $this->calculateRequiredMovements($parent);
+
+        foreach ($requiredMovements as $direction => $required) {
+            if ($required) {
+                $this->move($direction);
+            }
         }
 
+        if ($this->getChild()) {
+            $this->getChild()->follow($this);
+        } else {
+            $this->markPositionVisited();
+        }
+    }
+
+    private function calculateRequiredMovements(Position $parent): array
+    {
         $requiredMovements = [
             self::DIRECTION_RIGHT => false,
             self::DIRECTION_LEFT => false,
@@ -119,7 +132,7 @@ class Position
             false === $requiredMovements[self::DIRECTION_UP] &&
             false === $requiredMovements[self::DIRECTION_DOWN]
         ) {
-            return;
+            return $requiredMovements;
         }
 
         if (!$this->parentAndChildAreInLine($parent)) {
@@ -140,39 +153,7 @@ class Position
             }
         }
 
-        foreach ($requiredMovements as $direction => $required) {
-            if (!$required) {
-                continue;
-            }
-
-            switch ($direction) {
-                case self::DIRECTION_UP:
-                    $this->setVertical($this->getVertical() + 1);
-                    break;
-                case self::DIRECTION_DOWN:
-                    $this->setVertical($this->getVertical() - 1);
-                    break;
-                case self::DIRECTION_LEFT:
-                    $this->setHorizontal($this->getHorizontal() - 1);
-                    break;
-                case self::DIRECTION_RIGHT:
-                    $this->setHorizontal($this->getHorizontal() + 1);
-                    break;
-            }
-        }
-
-        if ($this->getChild()) {
-            $this->getChild()->follow($this);
-        } else {
-            $this->markPositionVisited();
-        }
-    }
-
-    private function parentAndChildAreInTheSamePlace(Position $parent): bool
-    {
-        return
-            $parent->getHorizontal() === $this->getHorizontal() &&
-            $parent->getVertical() === $this->getVertical();
+        return $requiredMovements;
     }
 
     private function parentAndChildAreInLine(Position $parent): bool
