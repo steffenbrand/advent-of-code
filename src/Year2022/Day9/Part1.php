@@ -18,7 +18,7 @@ class Part1
 
     public function solve(string $puzzle): int
     {
-        $this->positionsVisitedByTail['h0v0'] = 1;
+        $this->markPositionVisitedByTail();
 
         foreach (explode(PHP_EOL, $puzzle) as $line) {
             $movement = explode(' ', $line);
@@ -48,6 +48,11 @@ class Part1
         // get current head position
         // determine where to move
         // update tail position
+        $this->markPositionVisitedByTail();
+    }
+
+    private function markPositionVisitedByTail(): void
+    {
         $this->positionsVisitedByTail[$this->tailPosition->getUniqueIdentifier()] = 1;
     }
 }
