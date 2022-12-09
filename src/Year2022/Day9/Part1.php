@@ -6,6 +6,13 @@ namespace AoC\Year2022\Day9;
 
 class Part1
 {
+    private const MAX_ALLOWED_DISTANCE = 1;
+
+    private const DIRECTION_UP = 'U';
+    private const DIRECTION_DOWN = 'D';
+    private const DIRECTION_LEFT = 'L';
+    private const DIRECTION_RIGHT = 'R';
+
     private Position $headPosition;
     private Position $tailPosition;
     private array $positionsVisitedByTail = [];
@@ -40,20 +47,147 @@ class Part1
 
     private function updateHeadPosition(string $direction): void
     {
-        // calculate new head position
+        switch ($direction) {
+            case self::DIRECTION_UP:
+                $this->headPosition->setVertical($this->headPosition->getVertical() + 1);
+                break;
+            case self::DIRECTION_DOWN:
+                $this->headPosition->setVertical($this->headPosition->getVertical() - 1);
+                break;
+            case self::DIRECTION_LEFT:
+                $this->headPosition->setHorizontal($this->headPosition->getHorizontal() - 1);
+                break;
+            case self::DIRECTION_RIGHT:
+                $this->headPosition->setHorizontal($this->headPosition->getHorizontal() + 1);
+                break;
+        }
     }
 
     private function updateTailPosition(): void
     {
-        // get current head position
-        // determine where to move
-        // update tail position
+        if ($this->headAndTailAreInTheSamePlace()) {
+            return;
+        }
+
+        $requiredMovements = [
+            self::DIRECTION_RIGHT => false,
+            self::DIRECTION_LEFT => false,
+            self::DIRECTION_UP => false,
+            self::DIRECTION_DOWN => false,
+        ];
+
+        if ($this->headIsTooFarRightOfTail()) {
+            $requiredMovements[self::DIRECTION_RIGHT] = true;
+        }
+
+        if ($this->headIsTooFarLeftOfTail()) {
+            $requiredMovements[self::DIRECTION_LEFT] = true;
+        }
+
+        if ($this->headIsTooFarAboveTail()) {
+            $requiredMovements[self::DIRECTION_UP] = true;
+        }
+
+        if ($this->headIsTooFarBelowTail()) {
+            $requiredMovements[self::DIRECTION_DOWN] = true;
+        }
+
+        if (false === $requiredMovements[self::DIRECTION_RIGHT] &&
+            false === $requiredMovements[self::DIRECTION_LEFT] &&
+            false === $requiredMovements[self::DIRECTION_UP] &&
+            false === $requiredMovements[self::DIRECTION_DOWN]
+        ) {
+            return;
+        }
+
+        if (!$this->headAndTailAreInLine()) {
+            if (!$requiredMovements[self::DIRECTION_RIGHT] &&
+                $this->headPosition->getHorizontal() > $this->tailPosition->getHorizontal())
+            {
+                $requiredMovements[self::DIRECTION_RIGHT] = true;
+            }
+
+            if (!$requiredMovements[self::DIRECTION_LEFT] &&
+                $this->tailPosition->getHorizontal() > $this->headPosition->getHorizontal())
+            {
+                $requiredMovements[self::DIRECTION_LEFT] = true;
+            }
+
+            if (!$requiredMovements[self::DIRECTION_UP] &&
+                $this->headPosition->getVertical() > $this->tailPosition->getVertical())
+            {
+                $requiredMovements[self::DIRECTION_UP] = true;
+            }
+
+            if (!$requiredMovements[self::DIRECTION_DOWN] &&
+                $this->tailPosition->getVertical() > $this->headPosition->getVertical())
+            {
+                $requiredMovements[self::DIRECTION_DOWN] = true;
+            }
+        }
+
+        foreach ($requiredMovements as $direction => $required) {
+            if (!$required) {
+                continue;
+            }
+
+            switch ($direction) {
+                case self::DIRECTION_UP:
+                    $this->tailPosition->setVertical($this->tailPosition->getVertical() + 1);
+                    break;
+                case self::DIRECTION_DOWN:
+                    $this->tailPosition->setVertical($this->tailPosition->getVertical() - 1);
+                    break;
+                case self::DIRECTION_LEFT:
+                    $this->tailPosition->setHorizontal($this->tailPosition->getHorizontal() - 1);
+                    break;
+                case self::DIRECTION_RIGHT:
+                    $this->tailPosition->setHorizontal($this->tailPosition->getHorizontal() + 1);
+                    break;
+            }
+        }
+
         $this->markPositionVisitedByTail();
     }
 
     private function markPositionVisitedByTail(): void
     {
         $this->positionsVisitedByTail[$this->tailPosition->getUniqueIdentifier()] = 1;
+    }
+
+
+    private function headAndTailAreInTheSamePlace(): bool
+    {
+        return
+            $this->headPosition->getHorizontal() === $this->tailPosition->getHorizontal() &&
+            $this->headPosition->getVertical() === $this->tailPosition->getVertical();
+    }
+
+    private function headAndTailAreInLine(): bool
+    {
+        return
+            $this->headPosition->getHorizontal() === $this->tailPosition->getHorizontal() ||
+            $this->headPosition->getVertical() === $this->tailPosition->getVertical();
+    }
+
+    private function headIsTooFarRightOfTail(): bool
+    {
+        return $this->headPosition->getHorizontal() - $this->tailPosition->getHorizontal() > self::MAX_ALLOWED_DISTANCE;
+    }
+
+    private function headIsTooFarLeftOfTail(): bool
+    {
+        return $this->tailPosition->getHorizontal() - $this->headPosition->getHorizontal() > self::MAX_ALLOWED_DISTANCE;
+    }
+
+    private function headIsTooFarAboveTail(): bool
+    {
+        return $this->headPosition->getVertical() - $this->tailPosition->getVertical() > self::MAX_ALLOWED_DISTANCE;
+    }
+
+    private function headIsTooFarBelowTail(): bool
+    {
+        return $this->tailPosition->getVertical() - $this->headPosition->getVertical() > self::MAX_ALLOWED_DISTANCE;
     }
 }
 

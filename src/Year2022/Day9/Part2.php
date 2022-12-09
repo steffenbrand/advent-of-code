@@ -8,12 +8,6 @@ class Part2
 {
     public function solve(string $puzzle): int
     {
-        $sum = 0;
-
-        foreach (explode(PHP_EOL, $puzzle) as $line) {
-
-        }
-
-        return $sum;
+        return 1;
     }
 }

@@ -29,10 +29,10 @@ class Part1Test extends TestCase
                 __DIR__ . '/../../../resources/Year2022/Day9/sample.txt',
                 13
             ],
-            //[
-            //    __DIR__ . '/../../../resources/Year2022/Day9/puzzle.txt',
-            //    1713
-            //]
+            [
+                __DIR__ . '/../../../resources/Year2022/Day9/puzzle.txt',
+                6498
+            ]
         ];
     }
 }
