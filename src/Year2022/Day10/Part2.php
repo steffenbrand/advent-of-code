@@ -16,20 +16,22 @@ class Part2
             $instruction = Instruction::createFromLine($line);
 
             while ($instruction->inExecution()) {
-                $this->horizontalPosition++;
+                $this->increaseHorizontalPosition();
                 $instruction->increaseCycleNumber();
                 $this->drawPixel();
 
-                if ($this->horizontalPosition % 40 === 0) {
-                    $this->DrawNewLine();
-                    $this->horizontalPosition = 0;
+                if ($this->horizontalPositionReachedLineEnd()) {
+                    $this->drawNewLine();
+                    $this->resetHorizontalPosition();
                 }
             }
 
-            $this->spritePosition += $instruction->getValue();
+            $this->updateSpritePosition($instruction->getValue());
         }
 
-        return rtrim($this->screen);
+        $this->removeLastNewLine();
+
+        return $this->screen;
     }
 
     private function drawPixel(): void
@@ -44,8 +46,33 @@ class Part2
         $this->screen .= '.';
     }
 
-    private function DrawNewLine(): void
+    private function drawNewLine(): void
     {
         $this->screen .= PHP_EOL;
+    }
+
+    private function resetHorizontalPosition(): void
+    {
+        $this->horizontalPosition = 0;
+    }
+
+    private function horizontalPositionReachedLineEnd(): bool
+    {
+        return $this->horizontalPosition % 40 === 0;
+    }
+
+    private function increaseHorizontalPosition(): void
+    {
+        $this->horizontalPosition++;
+    }
+
+    private function updateSpritePosition(int $value): void
+    {
+        $this->spritePosition += $value;
+    }
+
+    private function removeLastNewLine(): void
+    {
+        $this->screen = rtrim($this->screen);
     }
 }
