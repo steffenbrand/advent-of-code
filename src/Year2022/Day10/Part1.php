@@ -11,7 +11,7 @@ class Part1
         $sum = 0;
         $x = 1;
         $cycle = 0;
-        $ofInterest = 100;
+        $ofInterest = 20;
 
         foreach (explode(PHP_EOL, $puzzle) as $line) {
             $instruction = Instruction::createFromLine($line);
@@ -20,7 +20,7 @@ class Part1
                 $cycle++;
                 $instruction->increaseCycleNumber();
 
-                if ($cycle === 20 || $cycle === 60 || $cycle % $ofInterest === 0) {
+                if ($cycle % $ofInterest === 0) {
                     $sum += $cycle * $x;
                     if ($cycle === $ofInterest) {
                         $ofInterest += 40;
