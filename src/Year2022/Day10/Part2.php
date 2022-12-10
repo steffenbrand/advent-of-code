@@ -18,7 +18,12 @@ class Part2
             while ($instruction->inExecution()) {
                 $this->increaseHorizontalPosition();
                 $instruction->increaseCycleNumber();
-                $this->drawPixel();
+
+                if ($this->horizontalPositionOverlapsWithSpritePosition()) {
+                    $this->drawLitPixel();
+                } else {
+                    $this->drawDarkPixel();
+                }
 
                 if ($this->horizontalPositionReachedLineEnd()) {
                     $this->drawNewLine();
@@ -32,18 +37,6 @@ class Part2
         $this->removeLastNewLine();
 
         return $this->screen;
-    }
-
-    private function drawPixel(): void
-    {
-        if ($this->horizontalPosition >= $this->spritePosition &&
-            $this->horizontalPosition <= $this->spritePosition + 2)
-        {
-            $this->screen .= '#';
-            return;
-        }
-
-        $this->screen .= '.';
     }
 
     private function drawNewLine(): void
@@ -74,5 +67,22 @@ class Part2
     private function removeLastNewLine(): void
     {
         $this->screen = rtrim($this->screen);
+    }
+
+    private function horizontalPositionOverlapsWithSpritePosition(): bool
+    {
+        return
+            $this->horizontalPosition >= $this->spritePosition &&
+            $this->horizontalPosition <= $this->spritePosition + 2;
+    }
+
+    private function drawLitPixel(): void
+    {
+        $this->screen .= '#';
+    }
+
+    private function drawDarkPixel(): void
+    {
+        $this->screen .= '.';
     }
 }
