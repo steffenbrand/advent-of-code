@@ -15,7 +15,7 @@ class Part2Test extends TestCase
     /**
      * @dataProvider provideData
      */
-    public function testSolve(string $filePath, int $expected): void
+    public function testSolve(string $filePath, string $expected): void
     {
         $actual = $this->getSut()->solve(file_get_contents($filePath));
 
@@ -27,11 +27,26 @@ class Part2Test extends TestCase
         return [
             [
                 __DIR__ . '/../../../resources/Year2022/Day10/sample.txt',
-                13140
+                <<<SCREEN
+##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....
+SCREEN
+
             ],
             [
                 __DIR__ . '/../../../resources/Year2022/Day10/puzzle.txt',
-                15880
+                <<<SCREEN
+###..#.....##..####.#..#..##..####..##..
+#..#.#....#..#.#....#.#..#..#....#.#..#.
+#..#.#....#....###..##...#..#...#..#....
+###..#....#.##.#....#.#..####..#...#.##.
+#....#....#..#.#....#.#..#..#.#....#..#.
+#....####..###.#....#..#.#..#.####..###.
+SCREEN
             ]
         ];
     }

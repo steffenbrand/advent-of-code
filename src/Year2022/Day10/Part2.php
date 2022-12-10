@@ -6,8 +6,41 @@ namespace AoC\Year2022\Day10;
 
 class Part2
 {
-    public function solve(string $puzzle): int
+    private int $spritePosition = 1;
+    private int $horizontalPosition = 0;
+    private string $screen = '';
+
+    public function solve(string $puzzle): string
     {
-        return 1;
+        foreach (explode(PHP_EOL, $puzzle) as $line) {
+            $instruction = Instruction::createFromLine($line);
+
+            while ($instruction->inExecution()) {
+                $this->horizontalPosition++;
+                $instruction->increaseCycleNumber();
+                $this->drawPixel();
+
+                if ($this->horizontalPosition % 40 === 0) {
+                    $this->screen .= PHP_EOL;
+                    $this->horizontalPosition = 0;
+                }
+            }
+
+            $this->spritePosition += $instruction->getValue();
+        }
+
+        return rtrim($this->screen);
+    }
+
+    private function drawPixel(): void
+    {
+        if ($this->horizontalPosition >= $this->spritePosition &&
+            $this->horizontalPosition <= $this->spritePosition + 2)
+        {
+            $this->screen .= '#';
+            return;
+        }
+
+        $this->screen .= '.';
     }
 }
