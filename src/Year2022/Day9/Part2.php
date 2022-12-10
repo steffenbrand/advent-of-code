@@ -62,7 +62,7 @@ class Position
     {
         $this->horizontal = $horizontal;
         $this->vertical = $vertical;
-        $this->visitedPositions[$this->getUniqueIdentifier()] = 1;
+        $this->markPositionVisited();
     }
 
     public function move(string $direction): void
@@ -85,7 +85,7 @@ class Position
 
     public function follow(Position $parent): void
     {
-        $requiredMovements = $this->calculateRequiredMovements($parent);
+        $requiredMovements = $this->determineRequiredMovements($parent);
 
         foreach ($requiredMovements as $direction => $required) {
             if ($required) {
@@ -93,14 +93,12 @@ class Position
             }
         }
 
-        if ($this->getChild()) {
-            $this->getChild()->follow($this);
-        } else {
-            $this->markPositionVisited();
-        }
+        $this->markPositionVisited();
+
+        $this->getChild()?->follow($this);
     }
 
-    private function calculateRequiredMovements(Position $parent): array
+    private function determineRequiredMovements(Position $parent): array
     {
         $requiredMovements = [
             self::DIRECTION_RIGHT => false,
@@ -154,13 +152,6 @@ class Position
         return $requiredMovements;
     }
 
-    private function parentAndChildAreInLine(Position $parent): bool
-    {
-        return
-            $parent->getHorizontal() === $this->getHorizontal() ||
-            $parent->getVertical() === $this->getVertical();
-    }
-
     private function parentIsTooFarRightOfChild(Position $parent): bool
     {
         return $parent->getHorizontal() - $this->getHorizontal() > self::MAX_ALLOWED_DISTANCE;
@@ -179,6 +170,13 @@ class Position
     private function parentIsTooFarBelowChild(Position $parent): bool
     {
         return $this->getVertical() - $parent->getVertical() > self::MAX_ALLOWED_DISTANCE;
+    }
+
+    private function parentAndChildAreInLine(Position $parent): bool
+    {
+        return
+            $parent->getHorizontal() === $this->getHorizontal() ||
+            $parent->getVertical() === $this->getVertical();
     }
 
     public function getUniqueIdentifier(): string
