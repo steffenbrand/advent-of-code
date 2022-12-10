@@ -21,7 +21,7 @@ class Part2
                 $this->drawPixel();
 
                 if ($this->horizontalPosition % 40 === 0) {
-                    $this->screen .= PHP_EOL;
+                    $this->DrawNewLine();
                     $this->horizontalPosition = 0;
                 }
             }
@@ -42,5 +42,10 @@ class Part2
         }
 
         $this->screen .= '.';
+    }
+
+    private function DrawNewLine(): void
+    {
+        $this->screen .= PHP_EOL;
     }
 }
