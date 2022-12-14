@@ -27,11 +27,11 @@ class Part1Test extends TestCase
         return [
             [
                 __DIR__ . '/../../../resources/Year2022/Day14/sample.txt',
-                1
+                24
             ],
             [
                 __DIR__ . '/../../../resources/Year2022/Day14/puzzle.txt',
-                1
+                715
             ]
         ];
     }
