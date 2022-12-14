@@ -50,5 +50,4 @@ class Part2
 
         return count($left) - count($right);
     }
-
 }

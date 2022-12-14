@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace AoC\Year2022\Day14;
+
+class Part1
+{
+    public function solve(string $puzzle): int
+    {
+        return 1;
+    }
+}

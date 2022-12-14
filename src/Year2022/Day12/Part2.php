@@ -101,10 +101,7 @@ class Part2
 
         if ($this->targetIsInsideMatrix($targetRow, $matrix, $targetColumn)) {
             $targetHeight = $matrix[$targetRow][$targetColumn];
-            if ($currentHeight > $targetHeight ||
-                $currentHeight === $targetHeight ||
-                $currentHeight + 1 === $targetHeight)
-            {
+            if ($targetHeight - 1 <= $currentHeight) {
                 return true;
             }
         }
